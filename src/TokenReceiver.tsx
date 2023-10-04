@@ -1,27 +1,25 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
+import Home from './Home';
+import { useToken } from './TokenContext';
+import * as url from "url"; // Импортируйте хук
 
 function TokenReceiver() {
-    const token = '';
+    const { setToken } = useToken(); // Используйте хук для доступа к токену
 
     useEffect(() => {
-        // Функция для извлечения токена из URL-фрагмента
         const extractTokenFromUrl = () => {
             const urlParams = new URLSearchParams(window.location.hash.substring(1));
-            const accessToken = urlParams.get("access_token");
+            console.log('urlParamst', urlParams);
 
-            if (accessToken) {
-                localStorage.setItem('accessToken', accessToken);
-                // Закрыть страницу после получения токена
-                window.close();
+            setToken(urlParams)
+            if (urlParams) {
             }
         };
 
-        // Настраиваем интервал для регулярной проверки URL
         const intervalId = setInterval(() => {
             extractTokenFromUrl();
-        }, 500); // Проверяем каждую секунду
+        }, 500);
 
-        // Удаление интервала при размонтировании компонента
         return () => {
             clearInterval(intervalId);
         };
@@ -30,14 +28,9 @@ function TokenReceiver() {
     return (
         <div>
             <h1>Ожидание токена...</h1>
-            {token && (
-                <div>
-                    <h2>Полученный токен:</h2>
-                    <p>{token}</p>
-                </div>
-            )}
         </div>
     );
 }
 
 export default TokenReceiver;
+

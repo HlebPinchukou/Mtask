@@ -1,44 +1,39 @@
 import React, { useEffect, useState } from 'react';
-import './LoadingPage.css'; // Создайте файл стилей для компонента
+import './LoadingPage.css';
+import { useToken } from './TokenContext'; // Импортируйте хук
 
 function Home() {
     const [loading, setLoading] = useState(true);
-    const [userData, setUserData] = useState(null);
-    const [token, setToken] = useState(localStorage.getItem('accessToken'));
+    const [userData, setUserData] = useState<{ login: string; id: string } | null>(null);
+    const { token } = useToken(); // Используйте хук для доступа к токену
 
     useEffect(() => {
-        // Здесь можно добавить логику для проверки наличия токена в локальном хранилище
-        // Если токен есть, установите setLoading(false), чтобы спиннер скрылся
         if (token) {
             setLoading(false);
         }
     }, [token]);
 
+
     useEffect(() => {
+        // Функция для отправки запроса к API Яндекс ID и получения данных о пользователе
         const fetchUserData = async () => {
             try {
-                const response = await fetch('/api/yandex', {
-                    method: 'POST',
+                const response = await fetch('https://login.yandex.ru/info', {
                     headers: {
-                        'Content-Type': 'application/json',
+                        Authorization: `OAuth ${token}`,
                     },
-                    body: JSON.stringify({ token }),
                 });
 
                 if (response.ok) {
                     const data = await response.json();
                     setUserData(data);
-                    setLoading(false);
-                } else {
-                    console.error('Failed to fetch user data');
-                    setLoading(false);
                 }
             } catch (error) {
                 console.error('Error fetching user data:', error);
-                setLoading(false);
             }
         };
 
+        // Проверяем, есть ли токен, и отправляем запрос, если он есть
         if (token) {
             fetchUserData();
         }
@@ -63,13 +58,11 @@ function Home() {
                         <div>
                             <p>Login: {userData.login}</p>
                             <p>User ID: {userData.id}</p>
+                            {/* Добавьте другие поля, которые хотите отобразить */}
                             <button onClick={handleLogout}>Log out</button>
                         </div>
                     ) : (
-                        <div>
                         <p>Failed to fetch user data.</p>
-                        <button onClick={handleLogout}>Clear cash</button>
-                        </div>
                     )}
                 </div>
             )}

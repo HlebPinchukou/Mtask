@@ -1,22 +1,25 @@
-import React, { useEffect } from 'react';
-import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
-import './App.css';
+import React from 'react';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import TokenReceiver from './TokenReceiver';
-import YaLog from './YaLog';
-import Home from "./home";
+import Home from './Home';
+import { TokenProvider } from './TokenContext';
+import YaLog from "./YaLog";
 
 function App() {
     return (
-        <Router>
-            <div>
-                <Routes>
-                    <Route path="/" element={<YaLog />} />
-                    <Route path="/tokenreceiver" element={<TokenReceiver />} />
-                    <Route path="/home" element={<Home />} />
-                </Routes>
-            </div>
-        </Router>
-    );
+        <TokenProvider>
+            <Router>
+                <div>
+                    <Routes>
+                        <Route path="/" element={<YaLog />} />
+                        <Route path="/tokenreceiver" element={<TokenReceiver />} />
+                        <Route path="/home" element={<Home />} />
+                    </Routes>
+                </div>
+            </Router>
+        </TokenProvider>
+);
 }
 
 export default App;
+

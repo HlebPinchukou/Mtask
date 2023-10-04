@@ -1,4 +1,5 @@
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
+import {useToken} from "./TokenContext";
 
 function YaLog() {
     useEffect(() => {
@@ -8,22 +9,32 @@ function YaLog() {
         iframe.frameBorder = '0';
 
         const container = document.getElementById('container');
-        container.appendChild(iframe);
 
-        iframe.onload = () => {
-            // Выполните дополнительные действия после загрузки iframe, если необходимо
-        };
+        // Проверяем, что container существует
+        if (container) {
+            container.appendChild(iframe);
 
-        return () => {
-            container.removeChild(iframe);
-        };
+            iframe.onload = () => {
+                // Выполните дополнительные действия после загрузки iframe, если необходимо
+            };
+
+            return () => {
+                // Проверяем снова, что container существует перед удалением
+                if (container.contains(iframe)) {
+                    container.removeChild(iframe);
+                }
+            };
+        }
     }, []);
 
-    let storedToken ='x';
+    let storedToken: string | null = 'x'; // Указываем тип явно
+    const { token } = useToken();
 
     const intervalId = setInterval(() => {
-        storedToken = localStorage.getItem('accessToken');
-        if (storedToken) {
+        storedToken = token;
+        console.log('int', token);
+        // Проверяем, что storedToken не равен null
+        if (storedToken !== null) {
             // Токен найден в локальном хранилище, выполняем редирект на страницу "home"
             clearInterval(intervalId); // Удаляем интервал
             window.location.href = '/home'; // Редирект на страницу "home"
