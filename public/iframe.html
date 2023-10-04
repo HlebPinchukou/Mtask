@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Yandex Autofill Widget</title>
+</head>
+<body>
+<div id="container"></div>
+<script>
+    // Создайте скрипт, который загружает и инициализирует виджет Yandex Autofill
+    (function() {
+        var script = document.createElement('script');
+        script.src = 'https://yastatic.net/s3/passport-sdk/autofill/v1/sdk-suggest-with-polyfills-latest.js';
+        script.async = true;
+
+        script.onload = function() {
+            window.YaAuthSuggest.init(
+                {
+                    client_id: 'f9b747140f8c449588a2c3978192ba7d',
+                    response_type: 'token',
+                    redirect_uri: 'http://127.0.0.1:5173/tokenreceiver',
+                },
+                'http://127.0.0.1:5173',
+                {
+                    view: "button",
+                    parentId: "buttonContainerId",
+                    buttonSize: 'xxl',
+                    buttonView: 'main',
+                    buttonTheme: 'light',
+                    buttonBorderRadius: "28",
+                    buttonIcon: 'ya',
+                }
+            )
+                .then(function(result) {
+                    return result.handler({ target: '_self' });
+                })
+                .then(function(data) {
+                    console.log('Сообщение с токеном: ', data);
+                    // Добавьте код для обработки данных (например, сохранение токена)
+                })
+                .catch(function(error) {
+                    console.log('Что-то пошло не так: ', error);
+                    // Обработка ошибок
+                });
+        };
+
+        document.body.appendChild(script);
+    })();
+</script>
+</body>
+</html>
