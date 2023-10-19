@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import './LoadingPage.css';
-import { useToken } from './TokenContext'; // Импортируйте хук
 
 function Home() {
     const [loading, setLoading] = useState(true);
-    const [userData, setUserData] = useState<{ login: string; id: string } | null>(null);
-    const { token } = useToken(); // Используйте хук для доступа к токену
+    const [userData, setUserData] = useState(null);
+
+    const token = localStorage.getItem('accessToken');
 
     useEffect(() => {
         if (token) {
@@ -13,9 +13,7 @@ function Home() {
         }
     }, [token]);
 
-
     useEffect(() => {
-        // Функция для отправки запроса к API Яндекс ID и получения данных о пользователе
         const fetchUserData = async () => {
             try {
                 const response = await fetch('https://login.yandex.ru/info', {
@@ -33,39 +31,40 @@ function Home() {
             }
         };
 
-        // Проверяем, есть ли токен, и отправляем запрос, если он есть
         if (token) {
             fetchUserData();
         }
     }, [token]);
 
     const handleLogout = () => {
-        // Очищаем локальное хранилище и перенаправляем на стартовую страницу
         localStorage.removeItem('accessToken');
         window.location.href = '/';
     };
 
     return (
-        <div>
-            {loading ? (
-                <div className="loading-container">
-                    <div className="spinner"></div>
-                </div>
-            ) : (
-                <div>
-                    <h1>User Information</h1>
-                    {userData ? (
+        <div className="container">
+            <div>
+                <h1>User Information</h1>
+                {userData ? (
+                    <div>
+                        <p><span className="bold-text">Login:</span> {userData.login}</p>
+                        <p><span className="bold-text">User ID:</span> {userData.id}</p>
                         <div>
-                            <p>Login: {userData.login}</p>
-                            <p>User ID: {userData.id}</p>
-                            {/* Добавьте другие поля, которые хотите отобразить */}
-                            <button onClick={handleLogout}>Log out</button>
+                            <img
+                                src={`https://avatars.yandex.net/get-yapic/${userData.default_avatar_id}/islands-200`}
+                                alt="User Avatar"
+                            />
                         </div>
-                    ) : (
-                        <p>Failed to fetch user data.</p>
-                    )}
-                </div>
-            )}
+                        <p><span className="bold-text">First Name:</span> {userData.first_name}</p>
+                        <p><span className="bold-text">Last Name:</span> {userData.last_name}</p>
+                        <p><span className="bold-text">Display Name:</span> {userData.display_name}</p>
+                        <p><span className="bold-text">Real Name:</span> {userData.real_name}</p>
+                        <button onClick={handleLogout}>Log out</button>
+                    </div>
+                ) : (
+                    <p>Failed to fetch user data.</p>
+                )}
+            </div>
         </div>
     );
 }

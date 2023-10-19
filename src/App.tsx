@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import TokenReceiver from './TokenReceiver';
 import Home from './Home';
 import { TokenProvider } from './TokenContext';
-import YaLog from "./YaLog";
+import YaLog from './YaLog';
 
 function App() {
     return (
@@ -18,7 +18,7 @@ function App() {
                 </div>
             </Router>
         </TokenProvider>
-);
+    );
 }
 
 export default App;

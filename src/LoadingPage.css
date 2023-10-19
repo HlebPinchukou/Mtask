@@ -7,14 +7,60 @@
 
 .spinner {
     border: 4px solid rgba(0, 0, 0, 0.3);
-    border-top: 4px solid #007bff; /* Цвет спиннера */
+    border-top: 4px solid #007bff;
     border-radius: 50%;
     width: 50px;
     height: 50px;
-    animation: spin 1s linear infinite; /* Анимация вращения */
+    animation: spin 1s linear infinite;
 }
 
 @keyframes spin {
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
+}
+
+.card{
+    padding-top: 30px;
+}
+
+/* LoadingPage.css */
+.container {
+    max-width: 400px;
+    margin: 0 auto;
+    text-align: center;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    background-color: #fff;
+}
+
+h1 {
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+
+img {
+    max-width: 200px;
+    border-radius: 50%;
+    margin-top: 10px;
+}
+
+button {
+    margin-top: 20px;
+    background-color: #0077b5;
+    color: #000000;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 20px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+button:hover {
+    background-color: #005b8e;
+}
+
+.bold-text {
+    font-weight: bold;
 }

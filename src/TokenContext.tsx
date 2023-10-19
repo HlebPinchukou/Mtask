@@ -1,9 +1,7 @@
 import { createContext, useContext, useState } from 'react';
 
-// Создайте контекст
 const TokenContext = createContext({ token: null, setToken: (action) => {} });
 
-// Создайте провайдер контекста
 export function TokenProvider({ children }) {
     const [token, setToken] = useState(null);
 
@@ -14,7 +12,6 @@ export function TokenProvider({ children }) {
     );
 }
 
-// Создайте хук для удобного доступа к значению контекста
 export function useToken() {
     const context = useContext(TokenContext);
     if (!context) {

@@ -1,29 +1,31 @@
 import React, { useEffect } from 'react';
-import Home from './Home';
 import { useToken } from './TokenContext';
-import * as url from "url"; // Импортируйте хук
 
 function TokenReceiver() {
-    const { setToken } = useToken(); // Используйте хук для доступа к токену
+    const { setToken } = useToken();
 
     useEffect(() => {
         const extractTokenFromUrl = () => {
             const urlParams = new URLSearchParams(window.location.hash.substring(1));
-            console.log('urlParamst', urlParams);
+            const accessToken = urlParams.get("access_token");
 
-            setToken(urlParams)
-            if (urlParams) {
+            if (accessToken) {
+                setToken(accessToken);
+
+                localStorage.setItem('accessToken', accessToken);
+
+                window.close();
             }
         };
 
         const intervalId = setInterval(() => {
             extractTokenFromUrl();
-        }, 500);
+        }, 5);
 
         return () => {
             clearInterval(intervalId);
         };
-    }, []);
+    }, [setToken]);
 
     return (
         <div>

@@ -7,9 +7,8 @@
 <body>
 <div id="container"></div>
 <script>
-    // Создайте скрипт, который загружает и инициализирует виджет Yandex Autofill
     (function() {
-        var script = document.createElement('script');
+        const script = document.createElement('script');
         script.src = 'https://yastatic.net/s3/passport-sdk/autofill/v1/sdk-suggest-with-polyfills-latest.js';
         script.async = true;
 
@@ -36,11 +35,9 @@
                 })
                 .then(function(data) {
                     console.log('Сообщение с токеном: ', data);
-                    // Добавьте код для обработки данных (например, сохранение токена)
                 })
                 .catch(function(error) {
                     console.log('Что-то пошло не так: ', error);
-                    // Обработка ошибок
                 });
         };
 
