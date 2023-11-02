@@ -24,7 +24,8 @@ function Home() {
 
                 if (response.ok) {
                     const data = await response.json();
-                    setUserData(data);
+                   setUserData(data);
+                    sendUserDataToServer(data);
                 }
             } catch (error) {
                 console.error('Error fetching user data:', error);
@@ -39,6 +40,27 @@ function Home() {
     const handleLogout = () => {
         localStorage.removeItem('accessToken');
         window.location.href = '/';
+    };
+
+    const sendUserDataToServer = async (userData) => {
+        try {
+            const response = await fetch('http://localhost:3000/api/user', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `OAuth ${token}`,
+                },
+                body: JSON.stringify(userData),
+            });
+
+            if (response.ok) {
+                console.log('User data saved successfully on the server.');
+            } else {
+                console.error('Error saving user data on the server.');
+            }
+        } catch (error) {
+            console.error('Error sending user data to the server:', error);
+        }
     };
 
     return (
